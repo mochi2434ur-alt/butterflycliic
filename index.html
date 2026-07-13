@@ -5,114 +5,72 @@
   <title>ぽかぽか陽気の朝</title>
 
   <style>
-    body {
-      margin: 0;
-      background: #faf7f2;
-      font-family: sans-serif;
+    body{
+      position:relative;
+      margin:0;
+      background:#faf7f2;
     }
 
-    .stage {
-      position: relative;
-      width: 960px;
-      height: 534px;
+    /* ちょうちょ */
+    .butterfly{
+      width:100px;
+      position:absolute;
+      transition:left 0.8s, top 0.8s;
     }
 
-    .stage img, .text-box, .text {
-      position: absolute;
+    #bt0{ left:300px; top:300px; }
+    #bt1{ left:500px; top:350px; }
+    #bt2{ left:100px; top:320px; width:150px; }
+
+    /* 青い生命体（背景と窓に挟まれたまま動く） */
+    .foo{
+      position:absolute;
+      width:50px;   /* 君が調整してOK */
+      z-index:10;   /* ← これだけでカーソルが当たるようになる */
+      transition:left 0.8s, top 0.8s;
     }
 
-    /* 背景（画面いっぱい） */
-    #bg0 {
-      left: 0;
-      top: 0;
-      width: 960px;
-      height: 534px;
-    }
-
-    /* 窓（背景の上） */
-    #bg1 {
-      left: 0;
-      top: 0;
-      width: 960px;
-      height: 534px;
-      z-index: 3;
-    }
-
-    /* ちょうちょ（画面下半分でスライド移動） */
-    .butterfly {
-      width: 100px;
-      z-index: 4;
-      transition: left 0.8s, top 0.8s;
-    }
-
-    #bt0 { left: 200px; top: 300px; }
-    #bt1 { left: 400px; top: 350px; }
-    #bt2 { left: 600px; top: 320px; width:150px; }
-
-    /* 青い生命体（小さくして5匹・スライド移動） */
-    .foo {
-      width: 50px;
-      z-index: 2; /* 背景と窓の間 */
-      position: absolute;
-      transition: left 0.8s, top 0.8s;
-    }
-
-    #foo0 { left: 380px; top: 210px; }
-    #foo1 { left: 420px; top: 260px; }
-    #foo2 { left: 460px; top: 230px; }
-    #foo3 { left: 500px; top: 280px; }
-    #foo4 { left: 540px; top: 220px; }
-
-    /* 文字の背景枠（薄いピンク） */
-    .text-box {
-      top: 20px;
-      left: 20px;
-      width: 350px;
-      height: 70px;
-      background: rgba(255, 200, 220, 0.35);
-      border-radius: 10px;
-      z-index: 5;
-    }
-
-    /* ピンク文字（小さくして枠に収める） */
-    .text {
-      top: 30px;
-      left: 35px;
-      color: #ff66aa;
-      font-size: 20px;
-      font-weight: bold;
-      line-height: 1.3;
-      z-index: 6;
+    /* ピンク文字の枠（君が調整してOK） */
+    #message{
+      position:absolute;
+      left:20px;
+      top:30px;
+      width:500px;
+      height:100px;
+      background-color:rgba(255,200,220,0.35);
+      color:#ff66aa;
+      font-size:24px;
+      font-weight:bold;
+      line-height:1.4;
+      padding:10px;
     }
   </style>
 </head>
 
 <body>
+
   <div class="stage">
 
-    <!-- 背景 -->
-    <img src="bg0.png" id="bg0">
+    <!-- 背景（君が調整してOK） -->
+    <img src="bg0.png" id="bg0" style="position:absolute; left:0; top:0;">
 
-    <!-- 青い生命体5匹（背景と窓の間） -->
-    <img src="foo.gif" class="foo" id="foo0">
-    <img src="foo.gif" class="foo" id="foo1">
-    <img src="foo.gif" class="foo" id="foo2">
-    <img src="foo.gif" class="foo" id="foo3">
-    <img src="foo.gif" class="foo" id="foo4">
+    <!-- 青い生命体（背景と窓の間に見える） -->
+    <img src="foo.gif" class="foo" id="foo0" style="left:380px; top:210px;">
+    <img src="foo.gif" class="foo" id="foo1" style="left:420px; top:260px;">
+    <img src="foo.gif" class="foo" id="foo2" style="left:460px; top:230px;">
+    <img src="foo.gif" class="foo" id="foo3" style="left:500px; top:280px;">
+    <img src="foo.gif" class="foo" id="foo4" style="left:540px; top:220px;">
 
-    <!-- 窓 -->
-    <img src="bg1.png" id="bg1">
+    <!-- 窓（青い生命体より前に見える） -->
+    <img src="bg1.png" id="bg1" style="position:absolute; left:0; top:0;">
 
-    <!-- ちょうちょ3匹 -->
+    <!-- ちょうちょ -->
     <img src="butterfly.gif" class="butterfly" id="bt0">
     <img src="butterfly.gif" class="butterfly" id="bt1">
     <img src="butterfly.gif" class="butterfly" id="bt2">
 
-    <!-- 文字背景 -->
-    <div class="text-box"></div>
-
     <!-- ピンク文字 -->
-    <div class="text">
+    <div id="message">
       ぽかぽか陽気の穏やかな朝<br>
       花畑では、蝶々がのんびり飛んでいます
     </div>
@@ -121,31 +79,30 @@
 
   <script>
     /* 画面サイズ */
-    const W = 960;
-    const H = 534;
+    const W = window.innerWidth;
+    const H = window.innerHeight;
 
     /* ちょうちょは画面下半分だけで逃げる */
-    const BUTTERFLY_MIN_Y = 260;
-    const BUTTERFLY_MAX_Y = 480;
+    const MIN_Y = H * 0.5;
+    const MAX_Y = H * 0.9;
 
-    document.querySelectorAll('.butterfly').forEach(el => {
-      el.addEventListener('mouseover', () => {
+    document.querySelectorAll('.butterfly').forEach(el=>{
+      el.addEventListener('mouseover', ()=>{
         const x = Math.random() * (W - 100);
-        const y = BUTTERFLY_MIN_Y + Math.random() * (BUTTERFLY_MAX_Y - BUTTERFLY_MIN_Y);
+        const y = MIN_Y + Math.random() * (MAX_Y - MIN_Y);
         el.style.left = x + 'px';
         el.style.top = y + 'px';
       });
     });
 
-    /* 窓の範囲（青い生命体用） */
+    /* 青い生命体は窓の中だけで逃げる */
     const WIN_LEFT = 360;
     const WIN_RIGHT = 850;
     const WIN_TOP = 190;
     const WIN_BOTTOM = 320;
 
-    /* 青い生命体5匹：窓の中だけでスライド移動 */
-    document.querySelectorAll('.foo').forEach(el => {
-      el.addEventListener('mouseover', () => {
+    document.querySelectorAll('.foo').forEach(el=>{
+      el.addEventListener('mouseover', ()=>{
         const x = WIN_LEFT + Math.random() * (WIN_RIGHT - WIN_LEFT - 50);
         const y = WIN_TOP + Math.random() * (WIN_BOTTOM - WIN_TOP - 50);
         el.style.left = x + 'px';
@@ -156,4 +113,3 @@
 
 </body>
 </html>
-
