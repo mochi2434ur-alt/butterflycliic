@@ -16,13 +16,14 @@
     top:0;
     width:1200px;   /* ← 君が自由に変更してOK */
     height:700px;  /* ← 君が自由に変更してOK */
+    z-index:1;
   }
 
   /* 青い生命体（背景と窓に挟まれて見えるが、カーソルは当たる） */
   .foo{
     position:absolute;
     width:50px;    /* ← 君が自由に変更してOK */
-    z-index:10;    /* ← これでカーソルが当たるようになる（見た目は挟まれたまま） */
+    z-index:5;    /* ← これでカーソルが当たるようになる（見た目は挟まれたまま） */
     transition:left 0.8s, top 0.8s;
   }
 
@@ -33,7 +34,7 @@
     top:0;
     width:1200px;   /* ← 君が自由に変更してOK */
     height:700px;  /* ← 君が自由に変更してOK */
-    z-index:2;     /* ← 青い生命体より後ろに見える */
+    z-index:20;     /* ← 青い生命体より後ろに見える */
   }
 
   /* ちょうちょ（下半分でスライド移動） */
@@ -41,7 +42,7 @@
     position:absolute;
     width:100px;
     transition:left 0.8s, top 0.8s;
-    z-index: 5;
+    z-index: 30;
   }
 
   /* ピンク文字（君が自由に変更してOK） */
@@ -57,6 +58,7 @@
     font-weight:bold;
     line-height:1.4;
     padding:10px;
+    z-index:50;
   }
 </style>
 
